@@ -1,0 +1,795 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Profile - EventHub</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css"
+    />
+    <style>
+      :root {
+        --primary: #374151;
+        --gradient-2: #374151;
+        --dark: #374151;
+        --light: #ffffff;
+        --gray: #9ca3af;
+        --success: #10b981;
+        --danger: #ef4444;
+        --bg-primary: #ffffff;
+        --bg-secondary: #f9fafb;
+        --bg-tertiary: #f3f4f6;
+        --border: #e5e7eb;
+        --text: #1f2937;
+        --text-secondary: #6b7280;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: "Inter", sans-serif;
+        background: var(--bg-primary);
+        color: var(--text);
+        padding-top: 140px;
+        overflow-x: hidden;
+        min-height: 100vh;
+      }
+
+      input,
+      select,
+      textarea {
+        border: 1px solid #d1d5db;
+        border-radius: 10px;
+        transition:
+          border-color 0.2s ease,
+          box-shadow 0.2s ease;
+      }
+
+      input:focus,
+      select:focus,
+      textarea:focus {
+        border-color: #9ca3af;
+        outline: none;
+        box-shadow: 0 0 0 2px rgba(156, 163, 175, 0.1);
+      }
+      .floating-navbar {
+        position: fixed;
+        top: 24px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: min(1200px, calc(100% - 2rem));
+        padding: 0.85rem 1.5rem;
+        background: rgba(255, 255, 255, 0.95);
+        border: 1px solid rgba(15, 23, 42, 0.08);
+        border-radius: 26px;
+        box-shadow: 0 18px 55px rgba(15, 23, 42, 0.12);
+        backdrop-filter: blur(16px);
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        z-index: 1000;
+        transition: all 0.3s ease;
+      }
+      .floating-navbar.scrolled {
+        top: 12px;
+        padding: 0.7rem 1.25rem;
+        border-radius: 22px;
+        box-shadow: 0 14px 40px rgba(15, 23, 42, 0.18);
+      }
+      .nav-brand {
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        text-decoration: none;
+      }
+      .brand-icon {
+        width: 42px;
+        height: 42px;
+        border-radius: 14px;
+        background: var(--gradient-2);
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 10px 25px rgba(55, 65, 81, 0.4);
+      }
+      .brand-title {
+        font-family: "Syne", sans-serif;
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: var(--text);
+        display: block;
+      }
+      .brand-subtitle {
+        font-size: 0.75rem;
+        letter-spacing: 0.08em;
+        color: var(--text-secondary);
+        text-transform: uppercase;
+      }
+      .nav-toggle {
+        border: none;
+        background: transparent;
+        font-size: 1.5rem;
+        color: var(--text);
+        display: none;
+        cursor: pointer;
+      }
+      .nav-content {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+      }
+      .nav-links {
+        list-style: none;
+        display: flex;
+        gap: 0.25rem;
+        margin: 0;
+        padding: 0;
+      }
+      .nav-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.55rem 1rem;
+        color: var(--text-secondary);
+        text-decoration: none;
+        border-radius: 999px;
+        font-weight: 500;
+        transition: all 0.25s ease;
+        font-size: 0.9rem;
+      }
+      .nav-link i {
+        font-size: 1rem;
+      }
+      .nav-link:hover {
+        color: var(--text);
+        background: rgba(55, 65, 81, 0.08);
+      }
+      .nav-link.active {
+        color: var(--gradient-2);
+        background: rgba(55, 65, 81, 0.14);
+      }
+      .nav-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+      .profile-dropdown {
+        position: relative;
+      }
+      .profile-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.5rem 1rem;
+        background: var(--bg-tertiary);
+        border: 1px solid var(--border);
+        border-radius: 50px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+      .profile-btn:hover {
+        background: var(--bg-secondary);
+        border-color: var(--gradient-2);
+      }
+      .profile-avatar {
+        width: 35px;
+        height: 35px;
+        background: var(--gradient-2);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        font-size: 0.875rem;
+        color: white;
+      }
+      .dropdown-menu {
+        position: absolute;
+        top: calc(100% + 0.5rem);
+        right: 0;
+        min-width: 200px;
+        background: var(--bg-secondary);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 0.5rem;
+        display: none;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      }
+      .dropdown-menu.show {
+        display: block;
+      }
+      .dropdown-item {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.75rem 1rem;
+        color: var(--text);
+        text-decoration: none;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+      .dropdown-item:hover {
+        background: rgba(59, 130, 246, 0.1);
+        color: var(--primary);
+      }
+      .dropdown-divider {
+        height: 1px;
+        background: var(--border);
+        margin: 0.5rem 0;
+      }
+      .main-content {
+        padding: 2rem;
+        max-width: 1000px;
+        margin: 0 auto;
+      }
+      h1 {
+        font-family: "Syne", sans-serif;
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 2rem;
+      }
+      .profile-header {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 24px;
+        padding: 2.5rem;
+        margin-bottom: 2rem;
+        text-align: center;
+      }
+      .avatar-large {
+        width: 120px;
+        height: 120px;
+        background: var(--gradient-2);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.5rem;
+        font-size: 3rem;
+        font-weight: 700;
+      }
+      .card {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 24px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+      }
+      .card-title {
+        font-family: "Syne", sans-serif;
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+      }
+      .form-label {
+        color: var(--gray);
+        font-size: 0.875rem;
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+        display: block;
+      }
+      .form-control {
+        width: 100%;
+        background: #ffffff;
+        border: 1px solid #d1d5db;
+        border-radius: 12px;
+        padding: 0.875rem 1rem;
+        color: #000000;
+        margin-bottom: 1rem;
+      }
+      .form-control:focus {
+        background: #ffffff;
+        border-color: #9ca3af;
+        outline: none;
+        box-shadow: 0 0 0 2px rgba(156, 163, 175, 0.1);
+      }
+      .btn {
+        padding: 0.875rem 1.5rem;
+        border-radius: 12px;
+        font-weight: 600;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .btn-primary {
+        background: var(--gradient-2);
+        color: white;
+      }
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 30px rgba(79, 172, 254, 0.4);
+      }
+      .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1.5rem;
+      }
+      .info-item {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 16px;
+        padding: 1.25rem;
+      }
+      .info-label {
+        color: var(--gray);
+        font-size: 0.875rem;
+        margin-bottom: 0.5rem;
+      }
+      .info-value {
+        font-weight: 600;
+        font-size: 1.1rem;
+      }
+      @media (max-width: 1200px) {
+        .profile-content {
+          grid-template-columns: 1fr;
+          gap: 2rem;
+        }
+        .profile-form {
+          max-width: 600px;
+          margin: 0 auto;
+        }
+      }
+
+      @media (max-width: 992px) {
+        .floating-navbar {
+          width: calc(100% - 2.5rem);
+        }
+        .main-content {
+          max-width: 100%;
+        }
+      }
+
+      @media (max-width: 768px) {
+        body {
+          padding-top: 120px;
+        }
+        .floating-navbar {
+          width: calc(100% - 2rem);
+          flex-wrap: wrap;
+        }
+        .nav-content {
+          position: absolute;
+          top: calc(100% + 0.75rem);
+          left: 0;
+          right: 0;
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 1rem;
+          padding: 1rem 1.25rem;
+          background: rgba(255, 255, 255, 0.98);
+          border-radius: 18px;
+          border: 1px solid rgba(15, 23, 42, 0.08);
+          box-shadow: 0 18px 38px rgba(15, 23, 42, 0.18);
+          opacity: 0;
+          pointer-events: none;
+          transform: translateY(-10px);
+          transition: all 0.25s ease;
+        }
+        .nav-content.open {
+          opacity: 1;
+          pointer-events: auto;
+          transform: translateY(0);
+        }
+        .nav-links {
+          flex-direction: column;
+          width: 100%;
+          gap: 0.75rem;
+        }
+        .nav-actions {
+          width: 100%;
+          flex-direction: column;
+          align-items: stretch;
+        }
+        .nav-toggle {
+          display: inline-flex;
+        }
+        .main-content {
+          padding: 1rem;
+        }
+        .page-header h1 {
+          font-size: 2rem;
+        }
+        .profile-form {
+          padding: 1.5rem;
+        }
+      }
+
+      @media (max-width: 576px) {
+        .page-header h1 {
+          font-size: 1.75rem;
+        }
+        .profile-form {
+          padding: 1.25rem;
+        }
+        .profile-btn span {
+          display: none;
+        }
+        .brand-title {
+          font-size: 1.25rem;
+        }
+        .form-group input,
+        .form-group select {
+          padding: 0.875rem 1rem;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .main-content {
+          padding: 0.75rem;
+        }
+        .profile-form {
+          padding: 1rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="floating-navbar" aria-label="Student navigation">
+      <a href="student-dashboard.html" class="nav-brand">
+        <span class="brand-icon"><i class="bi bi-calendar-event"></i></span>
+        <span>
+          <span class="brand-title">EventHub</span>
+          <span class="brand-subtitle">Student Space</span>
+        </span>
+      </a>
+
+      <button
+        class="nav-toggle"
+        id="studentNavToggle"
+        aria-label="Toggle navigation"
+      >
+        <i class="bi bi-list"></i>
+      </button>
+
+      <div class="nav-content" id="studentNavContent">
+        <ul class="nav-links">
+          <li>
+            <a href="student-dashboard.html" class="nav-link"
+              ><i class="bi bi-house-door"></i> Dashboard</a
+            >
+          </li>
+          <li>
+            <a href="events.html" class="nav-link"
+              ><i class="bi bi-compass"></i> Explore Events</a
+            >
+          </li>
+          <li>
+            <a href="my-events.html" class="nav-link"
+              ><i class="bi bi-bookmark"></i> My Events</a
+            >
+          </li>
+          <li>
+            <a href="certificates.html" class="nav-link"
+              ><i class="bi bi-award"></i> Certificates</a
+            >
+          </li>
+        </ul>
+
+        <div class="nav-actions">
+          <div class="profile-dropdown">
+            <div class="profile-btn" onclick="toggleDropdown()">
+              <div class="profile-avatar">ST</div>
+              <span id="studentName">Student</span>
+              <i class="bi bi-chevron-down"></i>
+            </div>
+            <div class="dropdown-menu" id="profileDropdown">
+              <a href="student-profile.html" class="dropdown-item"
+                ><i class="bi bi-person"></i> Profile</a
+              >
+              <div class="dropdown-divider"></div>
+              <a href="#" class="dropdown-item" onclick="logout()"
+                ><i class="bi bi-box-arrow-right"></i> Logout</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <div class="main-content">
+      <h1>My Profile</h1>
+
+      <div class="profile-header">
+        <div class="avatar-large" id="avatarLarge">ST</div>
+        <h2
+          style="
+            font-family: &quot;Syne&quot;, sans-serif;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+          "
+          id="profileName"
+        >
+          Student Name
+        </h2>
+        <p style="color: var(--gray)" id="profileEmail">email@example.com</p>
+      </div>
+
+      <div class="card">
+        <h3 class="card-title">Profile Information</h3>
+        <div class="info-grid">
+          <div class="info-item">
+            <div class="info-label">Roll Number</div>
+            <div class="info-value" id="infoRoll">-</div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">Department</div>
+            <div class="info-value" id="infoDept">-</div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">Year</div>
+            <div class="info-value" id="infoYear">-</div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">Phone</div>
+            <div class="info-value" id="infoPhone">-</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 class="card-title">Edit Profile</h3>
+        <form id="editProfileForm">
+          <div class="row">
+            <div class="col-md-6">
+              <label class="form-label">Name</label>
+              <input type="text" class="form-control" id="editName" required />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Roll Number</label>
+              <input type="text" class="form-control" id="editRoll" required />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Department</label>
+              <input type="text" class="form-control" id="editDept" required />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Year</label>
+              <select class="form-control" id="editYear" required>
+                <option value="1st Year">1st Year</option>
+                <option value="2nd Year">2nd Year</option>
+                <option value="3rd Year">3rd Year</option>
+                <option value="4th Year">4th Year</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Email</label>
+              <input
+                type="email"
+                class="form-control"
+                id="editEmail"
+                required
+              />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Phone</label>
+              <input type="tel" class="form-control" id="editPhone" required />
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary">
+            <i class="bi bi-check-circle"></i> Save Changes
+          </button>
+        </form>
+      </div>
+
+      <div class="card">
+        <h3 class="card-title">Participation History</h3>
+
+        <div style="margin-bottom: 2rem">
+          <h4
+            style="
+              font-size: 1.1rem;
+              font-weight: 600;
+              margin-bottom: 1rem;
+              color: var(--text);
+              display: flex;
+              align-items: center;
+              gap: 0.5rem;
+            "
+          >
+            <i class="bi bi-calendar-event" style="color: var(--primary)"></i>
+            Upcoming Events
+          </h4>
+          <div id="upcomingHistoryContainer"></div>
+        </div>
+
+        <div>
+          <h4
+            style="
+              font-size: 1.1rem;
+              font-weight: 600;
+              margin-bottom: 1rem;
+              color: var(--text);
+              display: flex;
+              align-items: center;
+              gap: 0.5rem;
+            "
+          >
+            <i
+              class="bi bi-calendar-check"
+              style="color: var(--text-secondary)"
+            ></i>
+            Past Events
+          </h4>
+          <div id="pastHistoryContainer"></div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const studentNavbar = document.querySelector(".floating-navbar");
+      const studentNavContent = document.getElementById("studentNavContent");
+      const studentNavToggle = document.getElementById("studentNavToggle");
+
+      function handleStudentNavbarOffset() {
+        if (!studentNavbar) return;
+        if (window.scrollY > 10) {
+          studentNavbar.classList.add("scrolled");
+        } else {
+          studentNavbar.classList.remove("scrolled");
+        }
+      }
+
+      studentNavToggle?.addEventListener("click", () => {
+        studentNavContent?.classList.toggle("open");
+      });
+
+      studentNavContent
+        ?.querySelectorAll("a")
+        .forEach((link) =>
+          link.addEventListener("click", () =>
+            studentNavContent.classList.remove("open"),
+          ),
+        );
+
+      document.addEventListener("click", (event) => {
+        if (!event.target.closest(".floating-navbar")) {
+          studentNavContent?.classList.remove("open");
+        }
+      });
+
+      window.addEventListener("scroll", handleStudentNavbarOffset);
+
+      const currentUser = JSON.parse(localStorage.getItem("current_user"));
+      if (!currentUser || currentUser.role !== "student")
+        window.location.href = "index.html";
+
+      function toggleDropdown() {
+        document.getElementById("profileDropdown").classList.toggle("show");
+      }
+      document.addEventListener("click", (e) => {
+        if (!e.target.closest(".profile-dropdown"))
+          document.getElementById("profileDropdown").classList.remove("show");
+      });
+      function logout() {
+        localStorage.removeItem("current_user");
+        window.location.href = "index.html";
+      }
+
+      function loadProfile() {
+        document.getElementById("studentName").textContent =
+          currentUser.name.split(" ")[0];
+        document.getElementById("avatarLarge").textContent = currentUser.name
+          .split(" ")
+          .map((n) => n[0])
+          .join("")
+          .toUpperCase()
+          .substring(0, 2);
+        document.getElementById("profileName").textContent = currentUser.name;
+        document.getElementById("profileEmail").textContent = currentUser.email;
+        document.getElementById("infoRoll").textContent =
+          currentUser.rollNumber;
+        document.getElementById("infoDept").textContent =
+          currentUser.department;
+        document.getElementById("infoYear").textContent = currentUser.year;
+        document.getElementById("infoPhone").textContent =
+          currentUser.phone || "Not set";
+
+        document.getElementById("editName").value = currentUser.name;
+        document.getElementById("editRoll").value = currentUser.rollNumber;
+        document.getElementById("editDept").value = currentUser.department;
+        document.getElementById("editYear").value = currentUser.year;
+        document.getElementById("editEmail").value = currentUser.email;
+        document.getElementById("editPhone").value = currentUser.phone || "";
+
+        loadHistory();
+      }
+
+      function loadHistory() {
+        const participants =
+          JSON.parse(localStorage.getItem("participants")) || [];
+        const events = JSON.parse(localStorage.getItem("events")) || [];
+        const myParticipations = participants.filter(
+          (p) => p.email === currentUser.email,
+        );
+
+        if (myParticipations.length === 0) {
+          document.getElementById("upcomingHistoryContainer").innerHTML =
+            '<p style="text-align:center;color:var(--gray);padding:2rem">No participation history</p>';
+          document.getElementById("pastHistoryContainer").innerHTML = "";
+          return;
+        }
+
+        const now = new Date();
+        const upcomingEvents = [];
+        const pastEvents = [];
+
+        myParticipations.forEach((p) => {
+          const event = events.find((e) => e.id === p.eventId);
+          if (!event) return;
+
+          const eventDate = new Date(event.datetime);
+          const isUpcoming =
+            eventDate >= now || eventDate.toDateString() === now.toDateString();
+
+          const eventCard = `
+            <div style="background:var(--bg-tertiary);border:1px solid var(--border);border-radius:16px;padding:1.25rem;margin-bottom:1rem">
+              <h4 style="font-weight:700;margin-bottom:0.5rem;color:var(--text)">${event.name}</h4>
+              <div style="color:var(--text-secondary);font-size:0.9rem">
+                <div style="display:flex;gap:1.5rem;flex-wrap:wrap;margin-top:0.5rem">
+                  <span><i class="bi bi-calendar3"></i> ${eventDate.toLocaleDateString()}</span>
+                  <span><i class="bi bi-geo-alt"></i> ${event.venue}</span>
+                  <span><i class="bi bi-calendar-check"></i> Registered: ${new Date(p.timestamp).toLocaleDateString()}</span>
+                </div>
+              </div>
+            </div>
+          `;
+
+          if (isUpcoming) {
+            upcomingEvents.push(eventCard);
+          } else {
+            pastEvents.push(eventCard);
+          }
+        });
+
+        document.getElementById("upcomingHistoryContainer").innerHTML =
+          upcomingEvents.length > 0
+            ? upcomingEvents.join("")
+            : '<p style="text-align:center;color:var(--gray);padding:1.5rem;background:var(--bg-secondary);border-radius:12px;">No upcoming events</p>';
+
+        document.getElementById("pastHistoryContainer").innerHTML =
+          pastEvents.length > 0
+            ? pastEvents.join("")
+            : '<p style="text-align:center;color:var(--gray);padding:1.5rem;background:var(--bg-secondary);border-radius:12px;">No past events</p>';
+      }
+
+      document
+        .getElementById("editProfileForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+
+          currentUser.name = document.getElementById("editName").value;
+          currentUser.rollNumber = document.getElementById("editRoll").value;
+          currentUser.department = document.getElementById("editDept").value;
+          currentUser.year = document.getElementById("editYear").value;
+          currentUser.email = document.getElementById("editEmail").value;
+          currentUser.phone = document.getElementById("editPhone").value;
+
+          localStorage.setItem("current_user", JSON.stringify(currentUser));
+          localStorage.setItem("student_user", JSON.stringify(currentUser));
+
+          alert("Profile updated successfully!");
+          loadProfile();
+        });
+
+      loadProfile();
+    </script>
+  </body>
+</html>

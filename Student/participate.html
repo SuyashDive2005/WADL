@@ -1,0 +1,1084 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Participate - EventHub</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css"
+    />
+    <style>
+      :root {
+        --primary: #374151;
+        --gradient: #374151;
+        --dark: #374151;
+        --light: #ffffff;
+        --gray: #9ca3af;
+        --success: #10b981;
+        --danger: #ef4444;
+        --warning: #f59e0b;
+        --bg-primary: #ffffff;
+        --bg-secondary: #f8fafc;
+        --bg-tertiary: #f1f5f9;
+        --border: #e2e8f0;
+        --text: #374151;
+        --text-secondary: #6b7280;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: "Inter", sans-serif;
+        background: var(--bg-primary);
+        color: var(--text);
+        padding-top: 140px;
+        overflow-x: hidden;
+        min-height: 100vh;
+      }
+      input,
+      select,
+      textarea {
+        border: 1px solid rgba(0, 0, 0, 0.25);
+        border-radius: 10px;
+        transition:
+          border-color 0.2s ease,
+          box-shadow 0.2s ease;
+      }
+
+      input:focus,
+      select:focus,
+      textarea:focus {
+        border-color: rgba(0, 0, 0, 0.45);
+        outline: none;
+        box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.08);
+      }
+      .floating-navbar {
+        position: fixed;
+        top: 24px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: min(1200px, calc(100% - 2rem));
+        padding: 0.85rem 1.5rem;
+        background: rgba(255, 255, 255, 0.95);
+        border: 1px solid rgba(15, 23, 42, 0.08);
+        border-radius: 26px;
+        box-shadow: 0 18px 55px rgba(15, 23, 42, 0.12);
+        backdrop-filter: blur(16px);
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        z-index: 1000;
+        transition: all 0.3s ease;
+      }
+      .floating-navbar.scrolled {
+        top: 12px;
+        padding: 0.7rem 1.25rem;
+        border-radius: 22px;
+        box-shadow: 0 14px 40px rgba(15, 23, 42, 0.18);
+      }
+      .nav-brand {
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        text-decoration: none;
+      }
+      .brand-icon {
+        width: 42px;
+        height: 42px;
+        border-radius: 14px;
+        background: var(--dark);
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 10px 25px rgba(55, 65, 81, 0.4);
+      }
+      .brand-title {
+        font-family: "Syne", sans-serif;
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: var(--text);
+        display: block;
+      }
+      .brand-subtitle {
+        font-size: 0.75rem;
+        letter-spacing: 0.08em;
+        color: var(--text-secondary);
+        text-transform: uppercase;
+      }
+      .nav-toggle {
+        border: none;
+        background: transparent;
+        font-size: 1.5rem;
+        color: var(--text);
+        display: none;
+        cursor: pointer;
+      }
+      .nav-content {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+      }
+      .nav-links {
+        list-style: none;
+        display: flex;
+        gap: 0.25rem;
+        margin: 0;
+        padding: 0;
+      }
+      .nav-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.55rem 1rem;
+        color: var(--text-secondary);
+        text-decoration: none;
+        border-radius: 999px;
+        font-weight: 500;
+        transition: all 0.25s ease;
+        font-size: 0.9rem;
+      }
+      .nav-link i {
+        font-size: 1rem;
+      }
+      .nav-link:hover {
+        color: var(--text);
+        background: rgba(55, 65, 81, 0.08);
+      }
+      .nav-link.active {
+        color: var(--dark);
+        background: rgba(55, 65, 81, 0.14);
+      }
+      .nav-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+      .profile-dropdown {
+        position: relative;
+      }
+      .profile-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.5rem 1rem;
+        background: var(--bg-tertiary);
+        border: 1px solid var(--border);
+        border-radius: 50px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+      .profile-btn:hover {
+        background: var(--bg-secondary);
+        border-color: var(--dark);
+      }
+      .profile-avatar {
+        width: 35px;
+        height: 35px;
+        background: var(--dark);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        font-size: 0.875rem;
+        color: white;
+      }
+      .dropdown-menu {
+        position: absolute;
+        top: calc(100% + 0.5rem);
+        right: 0;
+        min-width: 200px;
+        background: var(--bg-secondary);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 0.5rem;
+        display: none;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      }
+      .dropdown-menu.show {
+        display: block;
+      }
+      .dropdown-item {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.75rem 1rem;
+        color: var(--text);
+        text-decoration: none;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+      .dropdown-item:hover {
+        background: rgba(59, 130, 246, 0.1);
+        color: var(--primary);
+      }
+      .dropdown-divider {
+        height: 1px;
+        background: var(--border);
+        margin: 0.5rem 0;
+      }
+      .main-content {
+        padding: 2rem;
+        max-width: 1400px;
+        margin: 0 auto;
+        width: 100%;
+        box-sizing: border-box;
+      }
+      .page-header {
+        margin-bottom: 2rem;
+      }
+      .page-header h1 {
+        font-family: "Syne", sans-serif;
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        color: var(--text);
+      }
+      .page-header p {
+        color: var(--gray);
+        font-size: 1.125rem;
+      }
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+      }
+      .stat-card {
+        background: var(--bg-secondary);
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        padding: 2rem;
+        text-align: center;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+      }
+      .stat-card:hover {
+        background: var(--bg-tertiary);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+      }
+      .stat-icon {
+        width: 60px;
+        height: 60px;
+        background: var(--primary);
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1rem;
+      }
+      .stat-icon i {
+        font-size: 1.5rem;
+        color: white;
+      }
+      .stat-value {
+        font-family: "Syne", sans-serif;
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+      }
+      .stat-label {
+        color: var(--text-secondary);
+        font-size: 0.875rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+      .filter-section {
+        background: var(--bg-secondary);
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+      .search-box {
+        flex: 1;
+        min-width: 300px;
+        position: relative;
+      }
+      .search-box input {
+        width: 100%;
+        background: var(--bg-primary);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 0.875rem 1rem 0.875rem 3rem;
+        color: var(--text);
+        font-size: 0.875rem;
+      }
+      .search-box input:focus {
+        outline: none;
+        border-color: var(--primary);
+        background: var(--bg-secondary);
+      }
+      .search-box i {
+        position: absolute;
+        left: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--text-secondary);
+      }
+      .filter-select {
+        background: var(--bg-primary);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 0.875rem 1rem;
+        color: var(--text);
+        min-width: 150px;
+      }
+      .filter-select:focus {
+        outline: none;
+        border-color: var(--primary);
+        background: var(--bg-secondary);
+      }
+      .events-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 2rem;
+        width: 100%;
+        box-sizing: border-box;
+      }
+      .event-card {
+        background: var(--bg-secondary);
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        padding: 2rem;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+      }
+      .event-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: var(--primary);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+      .event-card:hover {
+        background: var(--bg-tertiary);
+        transform: translateY(-2px);
+        border-color: var(--primary);
+      }
+      .event-card:hover::before {
+        opacity: 1;
+      }
+      .event-badges {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 1rem;
+      }
+      .badge {
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+      .badge-academic {
+        background: rgba(99, 102, 241, 0.1);
+        color: #6366f1;
+      }
+      .badge-cultural {
+        background: rgba(245, 158, 11, 0.1);
+        color: #f59e0b;
+      }
+      .badge-sports {
+        background: rgba(16, 185, 129, 0.1);
+        color: #10b981;
+      }
+      .badge-technical {
+        background: rgba(139, 92, 246, 0.1);
+        color: #8b5cf6;
+      }
+      .badge-workshop {
+        background: rgba(236, 72, 153, 0.1);
+        color: #ec4899;
+      }
+      .badge-open {
+        background: rgba(16, 185, 129, 0.1);
+        color: #10b981;
+      }
+      .badge-closed {
+        background: rgba(239, 68, 68, 0.1);
+        color: #ef4444;
+      }
+      .badge-registered {
+        background: rgba(59, 130, 246, 0.1);
+        color: var(--primary);
+      }
+      .badge-deadline-soon {
+        background: rgba(245, 158, 11, 0.1);
+        color: #f59e0b;
+      }
+      .event-title {
+        font-family: "Syne", sans-serif;
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        color: var(--text);
+      }
+      .event-meta {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        margin-bottom: 1.5rem;
+      }
+      .meta-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--text-secondary);
+        font-size: 0.875rem;
+      }
+      .meta-item i {
+        width: 16px;
+        color: var(--primary);
+      }
+      .event-description {
+        color: var(--text-secondary);
+        font-size: 0.875rem;
+        line-height: 1.5;
+        margin-bottom: 1.5rem;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+      .event-progress {
+        margin-bottom: 1.5rem;
+      }
+      .progress-label {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 0.5rem;
+        font-size: 0.875rem;
+        color: var(--text-secondary);
+      }
+      .progress-bar {
+        width: 100%;
+        height: 6px;
+        background: var(--bg-tertiary);
+        border-radius: 3px;
+        overflow: hidden;
+      }
+      .progress-fill {
+        height: 100%;
+        background: var(--primary);
+        transition: width 0.3s ease;
+      }
+      .event-actions {
+        display: flex;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+      }
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.5rem;
+        border-radius: 12px;
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 0.875rem;
+        transition: all 0.3s ease;
+        border: none;
+        cursor: pointer;
+        flex: 1;
+        justify-content: center;
+        min-width: 120px;
+      }
+      .btn-primary {
+        background: var(--primary);
+        color: white;
+      }
+      .btn-primary:hover {
+        background: #1f2937;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(31, 41, 55, 0.3);
+      }
+      .btn-secondary {
+        background: var(--bg-primary);
+        color: var(--text);
+        border: 1px solid var(--border);
+      }
+      .btn-secondary:hover {
+        background: var(--bg-tertiary);
+        transform: translateY(-1px);
+      }
+      .btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none !important;
+      }
+      .empty-state {
+        grid-column: 1 / -1;
+        text-align: center;
+        padding: 4rem 2rem;
+        color: var(--text-secondary);
+      }
+      .empty-state i {
+        font-size: 4rem;
+        opacity: 0.3;
+        margin-bottom: 1rem;
+        display: block;
+      }
+      .empty-state h3 {
+        font-family: "Syne", sans-serif;
+        margin-bottom: 0.5rem;
+        opacity: 0.7;
+      }
+      .deadline-warning {
+        background: rgba(245, 158, 11, 0.1);
+        border: 1px solid rgba(245, 158, 11, 0.3);
+        border-radius: 12px;
+        padding: 1rem;
+        margin-bottom: 1.5rem;
+      }
+      .deadline-warning i {
+        color: #fbbf24;
+        margin-right: 0.5rem;
+      }
+      .deadline-warning-text {
+        color: #f59e0b;
+        font-size: 0.875rem;
+        font-weight: 500;
+      }
+      @media (max-width: 1200px) {
+        .events-grid {
+          grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        }
+        .stats-grid {
+          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        }
+      }
+
+      @media (max-width: 992px) {
+        .top-navbar {
+          padding: 0 1rem;
+        }
+        .navbar-nav {
+          gap: 0.25rem;
+        }
+        .nav-link {
+          padding: 0.5rem 0.75rem;
+          font-size: 0.875rem;
+        }
+        .main-content {
+          max-width: 100%;
+        }
+      }
+
+      @media (max-width: 768px) {
+        body {
+          padding-top: 120px;
+        }
+        .top-navbar {
+          height: auto;
+          min-height: 70px;
+          flex-wrap: wrap;
+          gap: 1rem;
+          padding: 1rem;
+        }
+        .navbar-nav {
+          order: 3;
+          width: 100%;
+          flex-wrap: wrap;
+          justify-content: center;
+          gap: 0.5rem;
+        }
+        .main-content {
+          padding: 1rem;
+        }
+        .page-header h1 {
+          font-size: 2rem;
+        }
+        .stats-grid {
+          grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+          gap: 1rem;
+        }
+        .events-grid {
+          grid-template-columns: 1fr;
+          gap: 1rem;
+        }
+        .filter-section {
+          flex-direction: column;
+          gap: 0.75rem;
+          padding: 1rem;
+        }
+        .search-box {
+          min-width: unset;
+        }
+        .filter-select {
+          width: 100%;
+        }
+        .event-actions {
+          flex-direction: column;
+        }
+        .btn {
+          min-width: unset;
+        }
+      }
+
+      @media (max-width: 576px) {
+        .page-header h1 {
+          font-size: 1.75rem;
+        }
+        .stats-grid {
+          grid-template-columns: 1fr 1fr;
+        }
+        .stat-card {
+          padding: 1.5rem 1rem;
+        }
+        .stat-icon {
+          width: 50px;
+          height: 50px;
+        }
+        .stat-value {
+          font-size: 1.5rem;
+        }
+        .event-card {
+          padding: 1.5rem;
+        }
+        .event-title {
+          font-size: 1.125rem;
+        }
+        .profile-btn span {
+          display: none;
+        }
+        .navbar-title {
+          font-size: 1.25rem;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .main-content {
+          padding: 0.75rem;
+        }
+        .stats-grid {
+          grid-template-columns: 1fr;
+        }
+        .filter-section {
+          padding: 0.75rem;
+        }
+        .search-box input {
+          padding: 0.75rem 1rem 0.75rem 2.5rem;
+        }
+        .event-meta {
+          gap: 0.375rem;
+        }
+        .meta-item {
+          font-size: 0.8125rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="floating-navbar" aria-label="Student navigation">
+      <a href="student-dashboard.html" class="nav-brand">
+        <span class="brand-icon"><i class="bi bi-calendar-event"></i></span>
+        <span>
+          <span class="brand-title">EventHub</span>
+          <span class="brand-subtitle">Student Space</span>
+        </span>
+      </a>
+
+      <button
+        class="nav-toggle"
+        id="studentNavToggle"
+        aria-label="Toggle navigation"
+      >
+        <i class="bi bi-list"></i>
+      </button>
+
+      <div class="nav-content" id="studentNavContent">
+        <ul class="nav-links">
+          <li>
+            <a href="student-dashboard.html" class="nav-link"
+              ><i class="bi bi-house-door"></i> Dashboard</a
+            >
+          </li>
+          <li>
+            <a href="events.html" class="nav-link"
+              ><i class="bi bi-compass"></i> Explore Events</a
+            >
+          </li>
+          <li>
+            <a href="my-events.html" class="nav-link"
+              ><i class="bi bi-bookmark"></i> My Events</a
+            >
+          </li>
+          <li>
+            <a href="certificates.html" class="nav-link"
+              ><i class="bi bi-award"></i> Certificates</a
+            >
+          </li>
+        </ul>
+
+        <div class="nav-actions">
+          <div class="profile-dropdown">
+            <div class="profile-btn" onclick="toggleDropdown()">
+              <div class="profile-avatar" id="studentAvatar">S</div>
+              <span id="studentName">Student</span>
+              <i class="bi bi-chevron-down"></i>
+            </div>
+            <div class="dropdown-menu" id="profileDropdown">
+              <a href="student-profile.html" class="dropdown-item"
+                ><i class="bi bi-person"></i> Profile</a
+              >
+              <div class="dropdown-divider"></div>
+              <a href="#" class="dropdown-item" onclick="logout()"
+                ><i class="bi bi-box-arrow-right"></i> Logout</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <div class="main-content">
+      <div class="page-header">
+        <h1><i class="bi bi-person-plus"></i> Participate in Events</h1>
+        <p>Discover and join exciting events happening on campus</p>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">
+            <i class="bi bi-calendar-check"></i>
+          </div>
+          <div class="stat-value" id="availableEvents">-</div>
+          <div class="stat-label">Available Events</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">
+            <i class="bi bi-clock-history"></i>
+          </div>
+          <div class="stat-value" id="deadlineSoon">-</div>
+          <div class="stat-label">Deadline Soon</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">
+            <i class="bi bi-people"></i>
+          </div>
+          <div class="stat-value" id="totalSpots">-</div>
+          <div class="stat-label">Available Spots</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">
+            <i class="bi bi-bookmark-check"></i>
+          </div>
+          <div class="stat-value" id="myRegistrations">-</div>
+          <div class="stat-label">My Registrations</div>
+        </div>
+      </div>
+
+      <div class="filter-section">
+        <div class="search-box">
+          <input
+            type="text"
+            id="searchInput"
+            placeholder="Search events by name or description..."
+            onkeyup="filterEvents()"
+          />
+          <i class="bi bi-search"></i>
+        </div>
+        <select
+          class="filter-select"
+          id="categoryFilter"
+          onchange="filterEvents()"
+        >
+          <option value="">All Categories</option>
+          <option value="Academic">Academic</option>
+          <option value="Cultural">Cultural</option>
+          <option value="Technical">Technical</option>
+          <option value="Workshop">Workshop</option>
+          <option value="Sports">Sports</option>
+        </select>
+        <select
+          class="filter-select"
+          id="statusFilter"
+          onchange="filterEvents()"
+        >
+          <option value="">All Status</option>
+          <option value="open">Open for Registration</option>
+          <option value="deadline-soon">Deadline Soon</option>
+          <option value="available">Available Spots</option>
+        </select>
+      </div>
+
+      <div class="events-grid" id="eventsGrid">
+        <!-- Events will be loaded here -->
+      </div>
+    </div>
+
+    <script>
+      const currentUser = JSON.parse(localStorage.getItem("current_user"));
+      if (!currentUser || currentUser.role !== "student") {
+        window.location.href = "../index.html";
+      }
+
+      document.getElementById("studentName").textContent =
+        currentUser.name.split(" ")[0];
+      document.getElementById("studentAvatar").textContent =
+        currentUser.name[0].toUpperCase();
+
+      function toggleDropdown() {
+        document.getElementById("profileDropdown").classList.toggle("show");
+      }
+
+      document.addEventListener("click", (e) => {
+        if (!e.target.closest(".profile-dropdown")) {
+          document.getElementById("profileDropdown").classList.remove("show");
+        }
+      });
+
+      function logout() {
+        localStorage.removeItem("current_user");
+        window.location.href = "../index.html";
+      }
+
+      function loadStats() {
+        const events = JSON.parse(localStorage.getItem("events")) || [];
+        const participants =
+          JSON.parse(localStorage.getItem("participants")) || [];
+        const now = new Date();
+
+        const availableEvents = events.filter((event) => {
+          const eventParticipants = participants.filter(
+            (p) => p.eventId === event.id,
+          ).length;
+          const isPastDeadline = new Date(event.deadline) < now;
+          const isFull = eventParticipants >= event.maxParticipants;
+          const isClosed = event.status === "closed";
+          const isRegistered = participants.some(
+            (p) => p.eventId === event.id && p.email === currentUser.email,
+          );
+
+          return !isPastDeadline && !isFull && !isClosed && !isRegistered;
+        });
+
+        const deadlineSoon = availableEvents.filter((event) => {
+          const deadlineDate = new Date(event.deadline);
+          const threeDaysFromNow = new Date();
+          threeDaysFromNow.setDate(threeDaysFromNow.getDate() + 3);
+          return deadlineDate <= threeDaysFromNow;
+        });
+
+        const totalSpots = availableEvents.reduce((sum, event) => {
+          const eventParticipants = participants.filter(
+            (p) => p.eventId === event.id,
+          ).length;
+          return sum + (event.maxParticipants - eventParticipants);
+        }, 0);
+
+        const myRegistrations = participants.filter(
+          (p) => p.email === currentUser.email,
+        ).length;
+
+        document.getElementById("availableEvents").textContent =
+          availableEvents.length;
+        document.getElementById("deadlineSoon").textContent =
+          deadlineSoon.length;
+        document.getElementById("totalSpots").textContent = totalSpots;
+        document.getElementById("myRegistrations").textContent =
+          myRegistrations;
+      }
+
+      function filterEvents() {
+        const searchTerm = document
+          .getElementById("searchInput")
+          .value.toLowerCase();
+        const categoryFilter = document.getElementById("categoryFilter").value;
+        const statusFilter = document.getElementById("statusFilter").value;
+
+        loadEvents(searchTerm, categoryFilter, statusFilter);
+      }
+
+      function loadEvents(
+        searchTerm = "",
+        categoryFilter = "",
+        statusFilter = "",
+      ) {
+        const events = JSON.parse(localStorage.getItem("events")) || [];
+        const participants =
+          JSON.parse(localStorage.getItem("participants")) || [];
+        const now = new Date();
+
+        const filtered = events.filter((event) => {
+          const eventParticipants = participants.filter(
+            (p) => p.eventId === event.id,
+          ).length;
+          const isPastDeadline = new Date(event.deadline) < now;
+          const isFull = eventParticipants >= event.maxParticipants;
+          const isClosed = event.status === "closed";
+          const isRegistered = participants.some(
+            (p) => p.eventId === event.id && p.email === currentUser.email,
+          );
+
+          // Only show events that can be participated in
+          if (isPastDeadline || isFull || isClosed || isRegistered) {
+            return false;
+          }
+
+          const matchesSearch =
+            event.name.toLowerCase().includes(searchTerm) ||
+            event.description.toLowerCase().includes(searchTerm);
+          const matchesCategory =
+            !categoryFilter || event.category === categoryFilter;
+
+          let matchesStatus = true;
+          if (statusFilter === "deadline-soon") {
+            const deadlineDate = new Date(event.deadline);
+            const threeDaysFromNow = new Date();
+            threeDaysFromNow.setDate(threeDaysFromNow.getDate() + 3);
+            matchesStatus = deadlineDate <= threeDaysFromNow;
+          } else if (statusFilter === "available") {
+            matchesStatus = eventParticipants < event.maxParticipants;
+          } else if (statusFilter === "open") {
+            matchesStatus = !isPastDeadline && !isFull && !isClosed;
+          }
+
+          return matchesSearch && matchesCategory && matchesStatus;
+        });
+
+        const grid = document.getElementById("eventsGrid");
+
+        if (filtered.length === 0) {
+          grid.innerHTML = `
+            <div class="empty-state">
+              <i class="bi bi-calendar-x"></i>
+              <h3>No events available for participation</h3>
+              <p>Check back later for new events or adjust your filters</p>
+            </div>
+          `;
+          return;
+        }
+
+        grid.innerHTML = filtered
+          .map((event) => {
+            const eventParticipants = participants.filter(
+              (p) => p.eventId === event.id,
+            ).length;
+            const availableSpots = event.maxParticipants - eventParticipants;
+            const participationPercent = Math.round(
+              (eventParticipants / event.maxParticipants) * 100,
+            );
+
+            // Check if deadline is soon (within 3 days)
+            const deadlineDate = new Date(event.deadline);
+            const threeDaysFromNow = new Date();
+            threeDaysFromNow.setDate(threeDaysFromNow.getDate() + 3);
+            const isDeadlineSoon = deadlineDate <= threeDaysFromNow;
+
+            const categoryClass = event.category.toLowerCase();
+
+            return `
+            <div class="event-card">
+              <div class="event-badges">
+                <span class="badge badge-${categoryClass}">${event.category}</span>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                  <span class="badge badge-open">Open</span>
+                  ${isDeadlineSoon ? '<span class="badge badge-deadline-soon">Deadline Soon</span>' : ""}
+                </div>
+              </div>
+
+              ${
+                isDeadlineSoon
+                  ? `
+                <div class="deadline-warning">
+                  <i class="bi bi-clock"></i>
+                  <span class="deadline-warning-text">Registration deadline: ${deadlineDate.toLocaleDateString()}</span>
+                </div>
+              `
+                  : ""
+              }
+
+              <h3 class="event-title">${event.name}</h3>
+
+              <div class="event-meta">
+                <div class="meta-item">
+                  <i class="bi bi-calendar3"></i>
+                  ${new Date(event.datetime).toLocaleDateString()}
+                </div>
+                <div class="meta-item">
+                  <i class="bi bi-clock"></i>
+                  ${new Date(event.datetime).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })}
+                </div>
+                <div class="meta-item">
+                  <i class="bi bi-geo-alt"></i>
+                  ${event.venue}
+                </div>
+                <div class="meta-item">
+                  <i class="bi bi-calendar-check"></i>
+                  Deadline: ${deadlineDate.toLocaleDateString()}
+                </div>
+                <div class="meta-item">
+                  <i class="bi bi-person"></i>
+                  Organized by: ${event.organizer}
+                </div>
+              </div>
+
+              <div class="event-description">
+                ${event.description}
+              </div>
+
+              <div class="event-progress">
+                <div class="progress-label">
+                  <span>Participation</span>
+                  <span>${eventParticipants}/${event.maxParticipants} registered</span>
+                </div>
+                <div class="progress-bar">
+                  <div class="progress-fill" style="width: ${participationPercent}%"></div>
+                </div>
+              </div>
+
+              <div class="event-actions">
+                <a href="event-details.html?id=${event.id}" class="btn btn-secondary">
+                  <i class="bi bi-eye"></i> View Details
+                </a>
+                <button class="btn btn-primary" onclick="quickRegister('${event.id}')">
+                  <i class="bi bi-person-plus"></i> Register Now
+                </button>
+              </div>
+            </div>
+          `;
+          })
+          .join("");
+      }
+
+      function quickRegister(eventId) {
+        if (confirm("Are you sure you want to register for this event?")) {
+          window.location.href = `event-details.html?id=${eventId}&register=true`;
+        }
+      }
+
+      // Initialize page
+      loadStats();
+      loadEvents();
+    </script>
+  </body>
+</html>

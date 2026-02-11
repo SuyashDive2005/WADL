@@ -1,0 +1,1024 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Create Event - EventHub</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css"
+    />
+    <style>
+      :root {
+        --primary: #374151;
+        --gradient: #374151;
+        --dark: #374151;
+        --light: #ffffff;
+        --gray: #9ca3af;
+        --success: #10b981;
+        --danger: #ef4444;
+        --bg-primary: #ffffff;
+        --bg-secondary: #f8fafc;
+        --bg-tertiary: #f1f5f9;
+        --border: #e2e8f0;
+        --text: #374151;
+        --text-secondary: #6b7280;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Inter", sans-serif;
+        background: var(--bg-primary);
+        color: var(--text);
+        padding-top: 140px;
+        overflow-x: hidden;
+        min-height: 100vh;
+      }
+
+      input,
+      select,
+      textarea {
+        background: #ffffff;
+        color: #000000;
+        border: 1px solid #d1d5db;
+        border-radius: 10px;
+        transition:
+          border-color 0.2s ease,
+          box-shadow 0.2s ease;
+      }
+
+      input:focus,
+      select:focus,
+      textarea:focus {
+        border-color: #9ca3af;
+        outline: none;
+        box-shadow: 0 0 0 2px rgba(156, 163, 175, 0.1);
+      }
+
+      .floating-navbar {
+        position: fixed;
+        top: 24px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: min(1200px, calc(100% - 2rem));
+        padding: 0.85rem 1.5rem;
+        background: rgba(255, 255, 255, 0.95);
+        border: 1px solid rgba(15, 23, 42, 0.08);
+        border-radius: 26px;
+        box-shadow: 0 18px 55px rgba(15, 23, 42, 0.12);
+        backdrop-filter: blur(16px);
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        z-index: 1000;
+        transition: all 0.3s ease;
+      }
+      .floating-navbar.scrolled {
+        top: 12px;
+        padding: 0.7rem 1.25rem;
+        border-radius: 22px;
+        box-shadow: 0 14px 40px rgba(15, 23, 42, 0.18);
+      }
+      .nav-brand {
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        text-decoration: none;
+      }
+      .brand-icon {
+        width: 42px;
+        height: 42px;
+        border-radius: 14px;
+        background: var(--dark);
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 10px 25px rgba(55, 65, 81, 0.4);
+      }
+      .brand-title {
+        font-family: "Syne", sans-serif;
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: var(--text);
+        display: block;
+      }
+      .brand-subtitle {
+        font-size: 0.75rem;
+        letter-spacing: 0.08em;
+        color: var(--text-secondary);
+        text-transform: uppercase;
+      }
+      .nav-toggle {
+        border: none;
+        background: transparent;
+        font-size: 1.5rem;
+        color: var(--text);
+        display: none;
+        cursor: pointer;
+      }
+      .nav-content {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+      }
+      .nav-links {
+        list-style: none;
+        display: flex;
+        gap: 0.25rem;
+        margin: 0;
+        padding: 0;
+      }
+      .nav-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.55rem 1rem;
+        color: var(--text-secondary);
+        text-decoration: none;
+        border-radius: 999px;
+        font-weight: 500;
+        transition: all 0.25s ease;
+        font-size: 0.9rem;
+      }
+      .nav-link i {
+        font-size: 1rem;
+      }
+      .nav-link:hover {
+        color: var(--text);
+        background: rgba(55, 65, 81, 0.08);
+      }
+      .nav-link.active {
+        color: var(--dark);
+        background: rgba(55, 65, 81, 0.14);
+      }
+      .nav-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+      .profile-dropdown {
+        position: relative;
+      }
+
+      .profile-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.5rem 1rem;
+        background: var(--bg-tertiary);
+        border: 1px solid var(--border);
+        border-radius: 50px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+      .profile-btn:hover {
+        background: var(--bg-secondary);
+        border-color: var(--dark);
+      }
+
+      .profile-avatar {
+        width: 35px;
+        height: 35px;
+        background: var(--primary);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        font-size: 0.875rem;
+        color: white;
+      }
+
+      .dropdown-menu {
+        position: absolute;
+        top: calc(100% + 0.5rem);
+        right: 0;
+        min-width: 200px;
+        background: var(--bg-secondary);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 0.5rem;
+        display: none;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      }
+      .dropdown-menu.show {
+        display: block;
+      }
+      .dropdown-item {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.75rem 1rem;
+        color: var(--text);
+        text-decoration: none;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+      .dropdown-item:hover {
+        background: rgba(59, 130, 246, 0.1);
+        color: var(--primary);
+      }
+
+      .dropdown-divider {
+        height: 1px;
+        background: var(--border);
+        margin: 0.5rem 0;
+      }
+
+      /* Main Content */
+      .main-content {
+        padding: 2rem;
+        max-width: 900px;
+        margin: 0 auto;
+      }
+
+      .page-header {
+        margin-bottom: 2rem;
+      }
+
+      .page-header h1 {
+        font-family: "Syne", sans-serif;
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+      }
+
+      .page-header p {
+        color: var(--gray);
+        font-size: 1.1rem;
+      }
+
+      /* Form Card */
+      .form-card {
+        background: rgba(255, 255, 255, 0.03);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 24px;
+        padding: 2.5rem;
+      }
+
+      .form-section {
+        margin-bottom: 2.5rem;
+      }
+
+      .form-section:last-child {
+        margin-bottom: 0;
+      }
+
+      .section-title {
+        font-family: "Syne", sans-serif;
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+
+      .section-title i {
+        width: 35px;
+        height: 35px;
+        background: rgba(99, 102, 241, 0.1);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--primary);
+      }
+
+      .form-label {
+        color: var(--gray);
+        font-size: 0.875rem;
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+        display: block;
+      }
+
+      .form-label .required {
+        color: var(--danger);
+      }
+
+      .form-control,
+      .form-select,
+      textarea {
+        width: 100%;
+        background: #ffffff;
+        border: 1px solid #d1d5db;
+        border-radius: 12px;
+        padding: 0.875rem 1rem;
+        color: #000000;
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+      }
+
+      .form-control:focus,
+      .form-select:focus,
+      textarea:focus {
+        background: #ffffff;
+        border-color: #9ca3af;
+        box-shadow: 0 0 0 2px rgba(156, 163, 175, 0.1);
+        outline: none;
+      }
+
+      .form-control::placeholder,
+      textarea::placeholder {
+        color: rgba(255, 255, 255, 0.5);
+      }
+
+      textarea {
+        min-height: 120px;
+        resize: vertical;
+      }
+
+      .form-row {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+      }
+
+      /* Category Selector */
+      .category-selector {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+      }
+
+      .category-option {
+        position: relative;
+      }
+
+      .category-option input[type="radio"] {
+        position: absolute;
+        opacity: 0;
+      }
+
+      .category-label {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 1.5rem 1rem;
+        background: rgba(255, 255, 255, 0.03);
+        border: 2px solid rgba(92, 92, 92, 0.649);
+        border-radius: 16px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .category-option input[type="radio"]:checked + .category-label {
+        background: rgba(99, 102, 241, 0.1);
+        border-color: var(--primary);
+      }
+
+      .category-label:hover {
+        background: rgba(255, 255, 255, 0.05);
+        border-color: rgba(255, 255, 255, 0.2);
+      }
+
+      .category-icon {
+        width: 50px;
+        height: 50px;
+        background: rgba(99, 102, 241, 0.1);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .category-icon i {
+        font-size: 1.5rem;
+        color: var(--primary);
+      }
+
+      .category-name {
+        font-weight: 600;
+        color: black;
+      }
+
+      /* Buttons */
+      .form-actions {
+        display: flex;
+        gap: 1rem;
+        margin-top: 2rem;
+      }
+
+      .btn {
+        padding: 1rem 2rem;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        text-decoration: none;
+      }
+
+      .btn-primary {
+        background: var(--gradient-1);
+        color: white;
+        flex: 1;
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
+      }
+
+      .btn-secondary {
+        background: rgba(255, 255, 255, 0.05);
+        color: var(--gray);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .btn-secondary:hover {
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+      }
+
+      /* Toast Notification */
+      .toast-container {
+        position: fixed;
+        top: 90px;
+        right: 2rem;
+        z-index: 1050;
+      }
+
+      .toast {
+        background: rgba(30, 41, 59, 0.95);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 16px;
+        padding: 1rem 1.5rem;
+        margin-bottom: 1rem;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        min-width: 300px;
+        animation: slideIn 0.3s ease;
+      }
+
+      @keyframes slideIn {
+        from {
+          transform: translateX(400px);
+          opacity: 0;
+        }
+        to {
+          transform: translateX(0);
+          opacity: 1;
+        }
+      }
+
+      .toast.success {
+        border-left: 4px solid var(--success);
+      }
+
+      .toast.error {
+        border-left: 4px solid var(--danger);
+      }
+
+      .toast-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+
+      .toast.success .toast-icon {
+        background: rgba(16, 185, 129, 0.2);
+        color: var(--success);
+      }
+
+      .toast.error .toast-icon {
+        background: rgba(239, 68, 68, 0.2);
+        color: var(--danger);
+      }
+
+      /* Responsive */
+      @media (max-width: 992px) {
+        .floating-navbar {
+          width: calc(100% - 2.5rem);
+        }
+        .main-content {
+          max-width: 100%;
+        }
+      }
+
+      @media (max-width: 768px) {
+        body {
+          padding-top: 120px;
+        }
+        .floating-navbar {
+          width: calc(100% - 2rem);
+          flex-wrap: wrap;
+        }
+        .nav-content {
+          position: absolute;
+          top: calc(100% + 0.75rem);
+          left: 0;
+          right: 0;
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 1rem;
+          padding: 1rem 1.25rem;
+          background: rgba(255, 255, 255, 0.98);
+          border-radius: 18px;
+          border: 1px solid rgba(15, 23, 42, 0.08);
+          box-shadow: 0 18px 38px rgba(15, 23, 42, 0.18);
+          opacity: 0;
+          pointer-events: none;
+          transform: translateY(-10px);
+          transition: all 0.25s ease;
+        }
+        .nav-content.open {
+          opacity: 1;
+          pointer-events: auto;
+          transform: translateY(0);
+        }
+        .nav-links {
+          flex-direction: column;
+          width: 100%;
+          gap: 0.75rem;
+        }
+        .nav-actions {
+          width: 100%;
+          flex-direction: column;
+          align-items: stretch;
+        }
+        .nav-toggle {
+          display: inline-flex;
+        }
+        .category-selector {
+          grid-template-columns: 1fr;
+        }
+
+        .form-row {
+          grid-template-columns: 1fr;
+        }
+
+        .main-content {
+          padding: 1rem;
+        }
+
+        .form-card {
+          padding: 1.5rem;
+        }
+      }
+
+      @media (max-width: 576px) {
+        .profile-btn span {
+          display: none;
+        }
+        .brand-title {
+          font-size: 1.25rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Floating Navbar -->
+    <nav class="floating-navbar" aria-label="Admin navigation">
+      <a href="admin-dashboard.html" class="nav-brand">
+        <span class="brand-icon"><i class="bi bi-calendar-event"></i></span>
+        <span>
+          <span class="brand-title">EventHub</span>
+          <span class="brand-subtitle">Admin Space</span>
+        </span>
+      </a>
+
+      <button
+        class="nav-toggle"
+        id="adminNavToggle"
+        aria-label="Toggle navigation"
+      >
+        <i class="bi bi-list"></i>
+      </button>
+
+      <div class="nav-content" id="adminNavContent">
+        <ul class="nav-links">
+          <li>
+            <a href="admin-dashboard.html" class="nav-link"
+              ><i class="bi bi-grid"></i> Dashboard</a
+            >
+          </li>
+          <li>
+            <a href="create-event.html" class="nav-link active"
+              ><i class="bi bi-plus-circle"></i> Create Event</a
+            >
+          </li>
+          <li>
+            <a href="manage-events.html" class="nav-link"
+              ><i class="bi bi-calendar-check"></i> Manage Events</a
+            >
+          </li>
+          <li>
+            <a href="participants.html" class="nav-link"
+              ><i class="bi bi-people"></i> Participants</a
+            >
+          </li>
+        </ul>
+
+        <div class="nav-actions">
+          <div class="profile-dropdown">
+            <div class="profile-btn" onclick="toggleDropdown()">
+              <div class="profile-avatar">AD</div>
+              <span id="adminName">Admin</span>
+              <i class="bi bi-chevron-down"></i>
+            </div>
+            <div class="dropdown-menu" id="profileDropdown">
+              <a href="admin-profile.html" class="dropdown-item">
+                <i class="bi bi-person"></i>
+                <span>Profile</span>
+              </a>
+              <div class="dropdown-divider"></div>
+              <a href="#" class="dropdown-item" onclick="resetSystem()">
+                <i class="bi bi-arrow-clockwise"></i>
+                <span>Reset System</span>
+              </a>
+              <a href="#" class="dropdown-item" onclick="logout()">
+                <i class="bi bi-box-arrow-right"></i>
+                <span>Logout</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <div class="page-header">
+        <h1>Create New Event</h1>
+        <p>Fill in the details to create a new campus event</p>
+      </div>
+
+      <form class="form-card" id="createEventForm">
+        <!-- Basic Information -->
+        <div class="form-section">
+          <h3 class="section-title">
+            <i class="bi bi-info-circle"></i>
+            Basic Information
+          </h3>
+
+          <div class="mb-3">
+            <label class="form-label"
+              >Event Name <span class="required">*</span></label
+            >
+            <input
+              type="text"
+              class="form-control"
+              id="eventName"
+              placeholder="Enter event name"
+              required
+            />
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label"
+              >Category <span class="required">*</span></label
+            >
+            <div class="category-selector">
+              <div class="category-option">
+                <input
+                  type="radio"
+                  name="category"
+                  id="tech"
+                  value="Tech"
+                  required
+                />
+                <label for="tech" class="category-label">
+                  <div class="category-icon">
+                    <i class="bi bi-cpu"></i>
+                  </div>
+                  <span class="category-name">Tech</span>
+                </label>
+              </div>
+              <div class="category-option">
+                <input
+                  type="radio"
+                  name="category"
+                  id="cultural"
+                  value="Cultural"
+                />
+                <label for="cultural" class="category-label">
+                  <div class="category-icon">
+                    <i class="bi bi-palette"></i>
+                  </div>
+                  <span class="category-name">Cultural</span>
+                </label>
+              </div>
+              <div class="category-option">
+                <input
+                  type="radio"
+                  name="category"
+                  id="sports"
+                  value="Sports"
+                />
+                <label for="sports" class="category-label">
+                  <div class="category-icon">
+                    <i class="bi bi-trophy"></i>
+                  </div>
+                  <span class="category-name">Sports</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label"
+              >Description <span class="required">*</span></label
+            >
+            <textarea
+              class="form-control"
+              id="description"
+              placeholder="Provide a detailed description of the event"
+              required
+            ></textarea>
+          </div>
+        </div>
+
+        <!-- Event Details -->
+        <div class="form-section">
+          <h3 class="section-title">
+            <i class="bi bi-calendar3"></i>
+            Event Details
+          </h3>
+
+          <div class="form-row">
+            <div class="mb-3">
+              <label class="form-label"
+                >Date & Time <span class="required">*</span></label
+              >
+              <input
+                type="datetime-local"
+                class="form-control"
+                id="datetime"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label class="form-label"
+                >Venue <span class="required">*</span></label
+              >
+              <input
+                type="text"
+                class="form-control"
+                id="venue"
+                placeholder="Enter venue location"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="mb-3">
+              <label class="form-label"
+                >Registration Deadline <span class="required">*</span></label
+              >
+              <input
+                type="datetime-local"
+                class="form-control"
+                id="deadline"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label class="form-label"
+                >Maximum Participants <span class="required">*</span></label
+              >
+              <input
+                type="number"
+                class="form-control"
+                id="maxParticipants"
+                placeholder="e.g., 100"
+                min="1"
+                required
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Organizer Information -->
+        <div class="form-section">
+          <h3 class="section-title">
+            <i class="bi bi-person-badge"></i>
+            Organizer Information
+          </h3>
+
+          <div class="form-row">
+            <div class="mb-3">
+              <label class="form-label"
+                >Organizer Name <span class="required">*</span></label
+              >
+              <input
+                type="text"
+                class="form-control"
+                id="organizerName"
+                placeholder="Enter organizer name"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label class="form-label"
+                >Contact Email <span class="required">*</span></label
+              >
+              <input
+                type="email"
+                class="form-control"
+                id="contactEmail"
+                placeholder="organizer@example.com"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label"
+              >Contact Phone <span class="required">*</span></label
+            >
+            <input
+              type="tel"
+              class="form-control"
+              id="contactPhone"
+              placeholder="Enter contact number"
+              required
+            />
+          </div>
+        </div>
+
+        <!-- Form Actions -->
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">
+            <i class="bi bi-check-circle"></i>
+            Create Event
+          </button>
+          <a href="admin-dashboard.html" class="btn btn-secondary">
+            <i class="bi bi-x-circle"></i>
+            Cancel
+          </a>
+        </div>
+      </form>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      // Check authentication
+      const currentUser = JSON.parse(localStorage.getItem("current_user"));
+      if (!currentUser || currentUser.role !== "admin") {
+        window.location.href = "index.html";
+      }
+
+      document.getElementById("adminName").textContent = currentUser.name;
+
+      // Toggle mobile menu
+      const navToggle = document.getElementById("adminNavToggle");
+      const navContent = document.getElementById("adminNavContent");
+      if (navToggle) {
+        navToggle.addEventListener("click", () => {
+          navContent.classList.toggle("open");
+        });
+      }
+
+      // Navbar scroll effect
+      window.addEventListener("scroll", () => {
+        const navbar = document.querySelector(".floating-navbar");
+        if (window.scrollY > 20) {
+          navbar.classList.add("scrolled");
+        } else {
+          navbar.classList.remove("scrolled");
+        }
+      });
+
+      // Dropdown functionality
+      function toggleDropdown() {
+        document.getElementById("profileDropdown").classList.toggle("show");
+      }
+
+      document.addEventListener("click", function (e) {
+        if (!e.target.closest(".profile-dropdown")) {
+          document.getElementById("profileDropdown").classList.remove("show");
+        }
+      });
+
+      function logout() {
+        localStorage.removeItem("current_user");
+        window.location.href = "index.html";
+      }
+
+      function resetSystem() {
+        if (confirm("Are you sure you want to reset the system?")) {
+          localStorage.setItem("events", JSON.stringify([]));
+          localStorage.setItem("participants", JSON.stringify([]));
+          location.reload();
+        }
+      }
+
+      // Set minimum datetime to now
+      const now = new Date();
+      const nowString = now.toISOString().slice(0, 16);
+      document.getElementById("datetime").min = nowString;
+      document.getElementById("deadline").min = nowString;
+
+      // Form submission
+      document
+        .getElementById("createEventForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+
+          // Get form values
+          const eventData = {
+            id: "event_" + Date.now(),
+            name: document.getElementById("eventName").value,
+            category: document.querySelector('input[name="category"]:checked')
+              .value,
+            description: document.getElementById("description").value,
+            datetime: document.getElementById("datetime").value,
+            venue: document.getElementById("venue").value,
+            deadline: document.getElementById("deadline").value,
+            maxParticipants: parseInt(
+              document.getElementById("maxParticipants").value,
+            ),
+            organizerName: document.getElementById("organizerName").value,
+            contactEmail: document.getElementById("contactEmail").value,
+            contactPhone: document.getElementById("contactPhone").value,
+            status: "open",
+            createdAt: new Date().toISOString(),
+          };
+
+          // Validate deadline is before event datetime
+          if (new Date(eventData.deadline) >= new Date(eventData.datetime)) {
+            showToast(
+              "Registration deadline must be before event date",
+              "error",
+            );
+            return;
+          }
+
+          // Save to localStorage
+          const events = JSON.parse(localStorage.getItem("events")) || [];
+          events.push(eventData);
+          localStorage.setItem("events", JSON.stringify(events));
+
+          // Show success message
+          showToast("Event created successfully!", "success");
+
+          // Redirect to manage events after a short delay
+          setTimeout(() => {
+            window.location.href = "manage-events.html";
+          }, 1500);
+        });
+
+      function showToast(message, type = "success") {
+        const toastContainer = document.getElementById("toastContainer");
+        const toast = document.createElement("div");
+        toast.className = `toast ${type}`;
+
+        const icon =
+          type === "success" ? "bi-check-circle" : "bi-exclamation-circle";
+
+        toast.innerHTML = `
+                <div class="toast-icon">
+                    <i class="bi ${icon}"></i>
+                </div>
+                <div>
+                    <div style="font-weight: 600; margin-bottom: 0.25rem;">${type === "success" ? "Success" : "Error"}</div>
+                    <div style="font-size: 0.875rem; color: var(--gray);">${message}</div>
+                </div>
+            `;
+
+        toastContainer.appendChild(toast);
+
+        setTimeout(() => {
+          toast.style.animation = "slideIn 0.3s ease reverse";
+          setTimeout(() => toast.remove(), 300);
+        }, 3000);
+      }
+    </script>
+  </body>
+</html>

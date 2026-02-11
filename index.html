@@ -1,0 +1,616 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EventHub - College Event Management</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css"
+    />
+    <style>
+      :root {
+        --primary: #374151;
+        --primary-dark: #1f2937;
+        --primary-light: #6b7280;
+        --secondary: #6b7280;
+        --success: #374151;
+        --danger: #374151;
+        --dark: #1f2937;
+        --light: #ffffff;
+        --gray: #9ca3af;
+        --bg-primary: #ffffff;
+        --bg-secondary: #f9fafb;
+        --bg-tertiary: #f3f4f6;
+        --border: #e5e7eb;
+        --text: #1f2937;
+        --text-secondary: #6b7280;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Inter", sans-serif;
+        background: var(--bg-primary);
+        color: var(--dark);
+        overflow-x: hidden;
+        min-height: 100vh;
+      }
+
+      input,
+      select,
+      textarea {
+        border: 1px solid rgba(0, 0, 0, 0.25);
+        border-radius: 10px;
+        transition:
+          border-color 0.2s ease,
+          box-shadow 0.2s ease;
+      }
+
+      input:focus,
+      select:focus,
+      textarea:focus {
+        border-color: rgba(0, 0, 0, 0.45);
+        outline: none;
+        box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.08);
+      }
+
+      /* Light Background */
+      .animated-bg {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+        background: var(--bg-primary);
+        overflow: hidden;
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translate(0, 0) rotate(0deg);
+        }
+        33% {
+          transform: translate(100px, -100px) rotate(120deg);
+        }
+        66% {
+          transform: translate(-50px, 50px) rotate(240deg);
+        }
+      }
+
+      /* Main Container */
+      .main-container {
+        position: relative;
+        z-index: 1;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+      }
+
+      /* Logo Section */
+      .logo-section {
+        text-align: center;
+        margin-bottom: 4rem;
+        animation: fadeInDown 0.8s ease;
+      }
+
+      .logo-icon {
+        width: 80px;
+        height: 80px;
+        background: var(--dark);
+        border-radius: 24px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 20px 60px rgba(31, 41, 55, 0.2);
+        animation: pulse 2s infinite;
+      }
+
+      .logo-icon i {
+        font-size: 2.5rem;
+        color: white;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.05);
+        }
+      }
+
+      h1 {
+        font-family: "Syne", sans-serif;
+        font-size: 4rem;
+        font-weight: 800;
+        margin-bottom: 0.5rem;
+        color: var(--dark);
+      }
+
+      .tagline {
+        font-size: 1.25rem;
+        color: var(--gray);
+        font-weight: 300;
+      }
+
+      /* Role Cards */
+      .role-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        max-width: 900px;
+        margin: 0 auto;
+        animation: fadeInUp 0.8s ease 0.2s both;
+      }
+
+      .role-card {
+        background: var(--bg-secondary);
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        padding: 3rem 2rem;
+        text-decoration: none;
+        color: inherit;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      }
+
+      .role-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+        border-color: var(--dark);
+        background: var(--bg-tertiary);
+      }
+
+      .role-card > * {
+        position: relative;
+        z-index: 1;
+      }
+
+      .role-icon {
+        width: 100px;
+        height: 100px;
+        margin: 0 auto 2rem;
+        background: var(--bg-tertiary);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+        border: 1px solid var(--border);
+      }
+
+      .role-card:hover .role-icon {
+        transform: scale(1.05);
+        background: rgba(31, 41, 55, 0.1);
+        border-color: var(--dark);
+      }
+
+      .role-icon i {
+        font-size: 3rem;
+        color: var(--dark);
+      }
+
+      .role-card h3 {
+        font-family: "Syne", sans-serif;
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        color: var(--dark);
+      }
+
+      .role-card p {
+        color: var(--text-secondary);
+        font-size: 1rem;
+        line-height: 1.6;
+        margin-bottom: 2rem;
+      }
+
+      .role-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 1rem 2rem;
+        background: var(--dark);
+        border: none;
+        border-radius: 50px;
+        color: white;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.3s ease;
+      }
+
+      .role-card:hover .role-btn {
+        background: var(--primary-dark);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(31, 41, 55, 0.3);
+      }
+
+      /* Animations */
+      @keyframes fadeInDown {
+        from {
+          opacity: 0;
+          transform: translateY(-30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Enhanced Responsive Design */
+      @media (max-width: 1200px) {
+        .features-grid {
+          grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        }
+      }
+
+      @media (max-width: 992px) {
+        .hero h1 {
+          font-size: 3.5rem;
+        }
+        .hero p {
+          font-size: 1.125rem;
+        }
+      }
+
+      @media (max-width: 768px) {
+        body {
+          overflow-x: hidden;
+        }
+        .hero {
+          padding: 4rem 1rem;
+          text-align: center;
+        }
+        .hero h1 {
+          font-size: 2.5rem;
+          line-height: 1.2;
+        }
+        .hero p {
+          font-size: 1rem;
+          margin-bottom: 2rem;
+        }
+        .role-container {
+          grid-template-columns: 1fr;
+          max-width: 400px;
+          gap: 1rem;
+        }
+        .role-card {
+          padding: 2rem 1.5rem;
+        }
+        .role-card h3 {
+          font-size: 1.25rem;
+        }
+      }
+
+      @media (max-width: 576px) {
+        .hero {
+          padding: 3rem 1rem;
+        }
+        .hero h1 {
+          font-size: 2rem;
+        }
+        .role-container {
+          max-width: 100%;
+          margin: 0 1rem;
+        }
+        .role-card {
+          padding: 1.5rem 1rem;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .hero {
+          padding: 2rem 0.75rem;
+        }
+        .hero h1 {
+          font-size: 1.75rem;
+        }
+        .role-card {
+          padding: 1.25rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="animated-bg"></div>
+
+    <div class="main-container">
+      <div class="w-100">
+        <div class="logo-section">
+          <div class="logo-icon">
+            <i class="bi bi-calendar-event"></i>
+          </div>
+          <h1>EventHub</h1>
+          <p class="tagline">Campus Events, Simplified</p>
+        </div>
+
+        <div class="role-container">
+          <div class="role-card admin" onclick="selectRole('admin')">
+            <div class="role-icon">
+              <i class="bi bi-shield-check"></i>
+            </div>
+            <h3>Admin</h3>
+            <p>
+              Manage events, participants, and oversee all campus activities
+            </p>
+            <div class="role-btn">
+              <span>Continue as Admin</span>
+              <i class="bi bi-arrow-right"></i>
+            </div>
+          </div>
+
+          <div class="role-card student" onclick="selectRole('student')">
+            <div class="role-icon">
+              <i class="bi bi-person-badge"></i>
+            </div>
+            <h3>Student</h3>
+            <p>
+              Discover events, register, and manage your campus participation
+            </p>
+            <div class="role-btn">
+              <span>Continue as Student</span>
+              <i class="bi bi-arrow-right"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      // Initialize localStorage if empty
+      function initializeApp() {
+        // Always load demo events and participants (this ensures they're available even after initialization)
+        const currentEvents = JSON.parse(localStorage.getItem("events")) || [];
+
+        // Only add demo events if events array is empty
+        if (currentEvents.length === 0) {
+          // Demo events
+          const demoEvents = [
+            {
+              id: "event_1738656000000",
+              name: "AI & Machine Learning Workshop",
+              category: "Tech",
+              description:
+                "Join us for an intensive workshop on Artificial Intelligence and Machine Learning. Learn about neural networks, deep learning algorithms, and practical applications. Hands-on coding sessions included.",
+              datetime: "2026-03-15T10:00",
+              venue: "Computer Lab - Block A",
+              deadline: "2026-03-10T23:59",
+              maxParticipants: 50,
+              organizerName: "Dr. Sarah Johnson",
+              contactEmail: "sarah.j@eventhub.com",
+              contactPhone: "9876543210",
+              status: "open",
+              createdAt: "2026-02-01T08:00:00.000Z",
+            },
+            {
+              id: "event_1738742400000",
+              name: "Annual Cultural Fest 2026",
+              category: "Cultural",
+              description:
+                "Celebrate diversity and creativity at our Annual Cultural Fest! Featuring dance performances, music concerts, drama, art exhibitions, and food stalls from various cultures. Open to all students.",
+              datetime: "2026-03-20T14:00",
+              venue: "Main Auditorium",
+              deadline: "2026-03-15T23:59",
+              maxParticipants: 200,
+              organizerName: "Cultural Committee",
+              contactEmail: "culture@eventhub.com",
+              contactPhone: "9876543211",
+              status: "open",
+              createdAt: "2026-02-01T09:00:00.000Z",
+            },
+            {
+              id: "event_1738828800000",
+              name: "Inter-College Basketball Tournament",
+              category: "Sports",
+              description:
+                "Showcase your basketball skills in our Inter-College Tournament. Teams of 5 players each. Exciting prizes for winners and runners-up. Registration per team.",
+              datetime: "2026-03-25T09:00",
+              venue: "Sports Complex - Court 1",
+              deadline: "2026-03-18T23:59",
+              maxParticipants: 80,
+              organizerName: "Sports Department",
+              contactEmail: "sports@eventhub.com",
+              contactPhone: "9876543212",
+              status: "open",
+              createdAt: "2026-02-01T10:00:00.000Z",
+            },
+            {
+              id: "event_1738915200000",
+              name: "Web Development Bootcamp",
+              category: "Tech",
+              description:
+                "Master modern web development! Learn HTML5, CSS3, JavaScript, React, and Node.js. Build real-world projects and get certificate upon completion. Perfect for beginners and intermediate developers.",
+              datetime: "2026-04-05T10:00",
+              venue: "Online - Zoom Link",
+              deadline: "2026-03-30T23:59",
+              maxParticipants: 100,
+              organizerName: "Tech Club",
+              contactEmail: "techclub@eventhub.com",
+              contactPhone: "9876543213",
+              status: "open",
+              createdAt: "2026-02-02T08:00:00.000Z",
+            },
+            {
+              id: "event_1739001600000",
+              name: "Photography Exhibition & Workshop",
+              category: "Cultural",
+              description:
+                "Explore the art of photography! Exhibition featuring student works followed by a hands-on workshop on composition, lighting, and editing. Bring your camera or smartphone.",
+              datetime: "2026-04-10T15:00",
+              venue: "Art Gallery - Ground Floor",
+              deadline: "2026-04-05T23:59",
+              maxParticipants: 60,
+              organizerName: "Photography Club",
+              contactEmail: "photo@eventhub.com",
+              contactPhone: "9876543214",
+              status: "open",
+              createdAt: "2026-02-02T09:00:00.000Z",
+            },
+            {
+              id: "event_1737360000000",
+              name: "Hackathon 2025 - Winter Edition",
+              category: "Tech",
+              description:
+                "24-hour coding marathon! Build innovative solutions to real-world problems. Categories: Healthcare, Education, Environment. Amazing prizes and internship opportunities for winners.",
+              datetime: "2026-01-20T09:00",
+              venue: "Innovation Hub - 3rd Floor",
+              deadline: "2026-01-15T23:59",
+              maxParticipants: 120,
+              organizerName: "Coding Club",
+              contactEmail: "hackathon@eventhub.com",
+              contactPhone: "9876543215",
+              status: "closed",
+              createdAt: "2025-12-20T08:00:00.000Z",
+            },
+            {
+              id: "event_1737446400000",
+              name: "Classical Music Night",
+              category: "Cultural",
+              description:
+                "An evening of mesmerizing classical music performances by renowned artists and talented students. Experience the magic of Indian classical music.",
+              datetime: "2026-01-25T18:00",
+              venue: "Main Auditorium",
+              deadline: "2026-01-20T23:59",
+              maxParticipants: 150,
+              organizerName: "Music Society",
+              contactEmail: "music@eventhub.com",
+              contactPhone: "9876543216",
+              status: "closed",
+              createdAt: "2025-12-22T10:00:00.000Z",
+            },
+            {
+              id: "event_1737532800000",
+              name: "Marathon Run 2026",
+              category: "Sports",
+              description:
+                "Annual 10K marathon for fitness enthusiasts. Run for health, run for fun! Refreshments and medals for all participants. T-shirts included in registration.",
+              datetime: "2026-01-30T06:00",
+              venue: "Campus Main Ground",
+              deadline: "2026-01-25T23:59",
+              maxParticipants: 250,
+              organizerName: "Athletics Club",
+              contactEmail: "athletics@eventhub.com",
+              contactPhone: "9876543217",
+              status: "closed",
+              createdAt: "2025-12-28T08:00:00.000Z",
+            },
+          ];
+
+          // Demo participants (some sample registrations)
+          const demoParticipants = [
+            {
+              eventId: "event_1737360000000",
+              name: "John Doe",
+              email: "john.doe@student.com",
+              rollNumber: "CS001",
+              department: "Computer Science",
+              year: "3rd Year",
+              phone: "9876543210",
+              timestamp: "2026-01-10T10:30:00.000Z",
+            },
+            {
+              eventId: "event_1737446400000",
+              name: "John Doe",
+              email: "john.doe@student.com",
+              rollNumber: "CS001",
+              department: "Computer Science",
+              year: "3rd Year",
+              phone: "9876543210",
+              timestamp: "2026-01-18T14:20:00.000Z",
+            },
+            {
+              eventId: "event_1738656000000",
+              name: "John Doe",
+              email: "john.doe@student.com",
+              rollNumber: "CS001",
+              department: "Computer Science",
+              year: "3rd Year",
+              phone: "9876543210",
+              timestamp: "2026-02-05T09:15:00.000Z",
+            },
+          ];
+
+          localStorage.setItem("events", JSON.stringify(demoEvents));
+          localStorage.setItem(
+            "participants",
+            JSON.stringify(demoParticipants),
+          );
+        }
+
+        // Initialize user accounts if not exists
+        if (!localStorage.getItem("eventhub_initialized")) {
+          // Default admin account
+          const defaultAdmin = {
+            username: "admin",
+            password: "admin123",
+            name: "Admin User",
+            email: "admin@eventhub.com",
+            role: "admin",
+          };
+
+          // Default student account
+          const defaultStudent = {
+            username: "student",
+            password: "student123",
+            name: "John Doe",
+            rollNumber: "CS001",
+            department: "Computer Science",
+            year: "3rd Year",
+            email: "john.doe@student.com",
+            phone: "9876543210",
+            role: "student",
+            avatar:
+              "https://ui-avatars.com/api/?name=John+Doe&background=6366f1&color=fff",
+          };
+
+          localStorage.setItem("admin_user", JSON.stringify(defaultAdmin));
+          localStorage.setItem("student_user", JSON.stringify(defaultStudent));
+          localStorage.setItem("eventhub_initialized", "true");
+        }
+      }
+
+      function selectRole(role) {
+        localStorage.setItem("selected_role", role);
+        window.location.href = "login.html";
+      }
+
+      // Initialize app on load
+      initializeApp();
+    </script>
+  </body>
+</html>
